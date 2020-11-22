@@ -20,7 +20,6 @@ function insertMessage() {
     if ($.trim(msg) == '') {
         return false;
     }
-
     sendMessage();
 }
 
@@ -79,6 +78,13 @@ $(window).on('keydown', function(e) {
                 } else {
                     $('<div class="message new"><figure class="avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpdX6tPX96Zk00S47LcCYAdoFK8INeCElPeJrVDrh8phAGqUZP_g" /></figure><div id="message-' + snapshot.key + '">' + snapshot.val().sender + ': ' + snapshot.val().message + '</div></div>').appendTo($('.mCSB_container')).addClass('new');
                 }
+                updateScrollbar();
+            });
+
+            firebase.database().ref("messages").on("child_removed", function (snapshot) {
+                var messageId = snapshot.key;
+                var element = document. getElementById("message-"+messageId);
+                element.parentNode.parentNode.removeChild(element.parentNode);
                 updateScrollbar();
             });
         }
